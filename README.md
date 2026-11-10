@@ -115,4 +115,4 @@ The app has not been validated against a physical C2. Before relying on it:
 
 No idle CPU, memory, or hardware latency claims have been measured yet. FTMS is notification-driven. Legacy connections poll every second, only while connected; disconnected discovery is bounded to twelve seconds. There is no per-sample history table.
 
-See [protocol attribution and licensing notes](THIRD_PARTY_NOTICES.md).
+Licensed under the [MIT License](LICENSE). See [protocol attribution and licensing notes](THIRD_PARTY_NOTICES.md).
