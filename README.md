@@ -9,6 +9,12 @@ Built and used daily with a **WalkingPad C2** (Bluetooth name `KS-BDC2`). Other 
 - Saves every walk on your Mac, including walks you took while the app was closed.
 - No account, no cloud, no tracking. Nothing leaves your Mac.
 
+<p align="center">
+  <img src="docs/screenshots/popup.png" width="32%" alt="Menu-bar popup with speed, distance, steps, time, speed presets, and the Start button">
+  <img src="docs/screenshots/settings-menu-bar.png" width="32%" alt="Settings: choosing which numbers the menu bar shows">
+  <img src="docs/screenshots/settings-belt.png" width="32%" alt="Settings: stop when I step off, connection, and units">
+</p>
+
 Requires macOS 26 (Tahoe) or later.
 
 ## Install
