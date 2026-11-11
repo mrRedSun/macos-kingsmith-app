@@ -14,7 +14,7 @@ class Walkingpad < Formula
     app = prefix/"WalkingPad.app"
     (app/"Contents/MacOS").install ".build/release/WalkingPad"
     (app/"Contents").install "Resources/Info.plist"
-    (app/"Contents/Resources").install "THIRD_PARTY_NOTICES.md"
+    (app/"Contents/Resources").install "THIRD_PARTY_NOTICES.md", "Resources/Icon/Assets.car", "Resources/Icon/AppIcon.icns"
     system "codesign", "--force", "--sign", "-", "--identifier", "app.walkingpad.native", app
   end
 

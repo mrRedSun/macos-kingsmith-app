@@ -27,6 +27,8 @@ final class BluetoothController: NSObject, ObservableObject, @preconcurrency CBC
     @Published private(set) var telemetry = FTMS.Telemetry()
     @Published private(set) var speedRange = FTMS.SpeedRange.conservative
     @Published private(set) var commandNotice: String?
+    /// Set when the app stopped an empty belt; cleared by the next Start.
+    @Published private(set) var steppedOffStop = false
     @Published var errorMessage: String?
     var onTelemetry: ((FTMS.Telemetry) -> Void)?
     var onPadRecord: ((LegacyProtocol.Record) -> Void)?
@@ -43,6 +45,12 @@ final class BluetoothController: NSObject, ObservableObject, @preconcurrency CBC
             else { reconnectTask?.cancel(); if waitingForPad { closeConnection() } }
         }
     }
+    /// Seconds without walking before an empty belt is stopped; nil turns it off.
+    /// KingSmith pads only: their counters advance only while someone walks.
+    var stepOffDelay: TimeInterval? {
+        didSet { stepOff.delay = stepOffDelay ?? 0; stepOff.reset() }
+    }
+    private var stepOff = StepOffDetector(delay: 5)
     var stepsAvailable: Bool { profile != .ftms || stepExtension }
 
     private var central: CBCentralManager!
@@ -154,6 +162,7 @@ final class BluetoothController: NSObject, ObservableObject, @preconcurrency CBC
     }
 
     func start() {
+        steppedOffStop = false
         if profile == .ftms { sendFTMS(FTMS.start) }
         else { sendLegacy(.start) }
     }
@@ -317,6 +326,10 @@ final class BluetoothController: NSObject, ObservableObject, @preconcurrency CBC
             historyDue = Date().addingTimeInterval(3) // The pad stores the walk once the belt stops.
         }
         telemetry.merge(update); fresh = true; armStaleTimeout()
+        if profile != .ftms, hasControl, stepOffDelay != nil, stepOff.update(telemetry, at: Date()) {
+            steppedOffStop = true
+            stop()
+        }
         status = hasControl ? "Connected" : "Connected, read only"
         onTelemetry?(update)
     }
@@ -334,7 +347,7 @@ final class BluetoothController: NSObject, ObservableObject, @preconcurrency CBC
         peripheral?.delegate = nil; peripheral = nil; control = nil; dataCharacteristic = nil
         commandQueue.reset(); legacyWrites.reset(); legacyDecoder = .init()
         legacyUnsent = nil; recoveringLegacyStop = false; profile = nil
-        historyDue = nil; historyAttempts = 0
+        historyDue = nil; historyAttempts = 0; stepOff.reset()
         stopQueued = false; busy = false; connecting = false; waitingForPad = false
         connected = false; hasControl = false; fresh = false
         telemetry = .init(); commandNotice = nil; status = "Disconnected"

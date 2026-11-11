@@ -55,6 +55,25 @@ struct PreferencesView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
+                    Text("Belt").font(.headline)
+                    VStack(alignment: .leading, spacing: 0) {
+                        Toggle("Stop when I step off", isOn: $model.stepOffStop)
+                            .frame(minHeight: 44)
+                        Divider()
+                        Stepper(value: $model.stepOffDelay, in: 3...60) {
+                            Text("After \(model.stepOffDelay) seconds without walking")
+                        }
+                        .frame(minHeight: 44)
+                        .disabled(!model.stepOffStop)
+                    }
+                    .toggleStyle(.switch).controlSize(.small)
+                    .padding(.horizontal, 16)
+                    .background(Color(nsColor: .controlBackgroundColor), in: .rect(cornerRadius: 16))
+                    Text("The pad only counts time and steps while someone walks, so the app stops a belt whose counters stay still. It starts checking 10 seconds after the belt starts, and only while the app is connected. KingSmith pads only. Keep the remote nearby.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+
+                VStack(alignment: .leading, spacing: 12) {
                     Text("Connection").font(.headline)
                     Toggle("Connect automatically", isOn: $model.autoConnect)
                         .toggleStyle(.switch).controlSize(.small)

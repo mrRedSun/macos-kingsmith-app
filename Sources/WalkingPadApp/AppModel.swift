@@ -38,6 +38,14 @@ final class AppModel: ObservableObject {
             bluetooth.autoConnect = autoConnect
         }
     }
+    /// Stops the belt once nobody has walked on it for `stepOffDelay` seconds.
+    @Published var stepOffStop = UserDefaults.standard.object(forKey: "stepOffStop") as? Bool ?? true {
+        didSet { UserDefaults.standard.set(stepOffStop, forKey: "stepOffStop"); applyStepOff() }
+    }
+    @Published var stepOffDelay = UserDefaults.standard.object(forKey: "stepOffDelay") as? Int ?? 5 {
+        didSet { UserDefaults.standard.set(stepOffDelay, forKey: "stepOffDelay"); applyStepOff() }
+    }
+    private func applyStepOff() { bluetooth.stepOffDelay = stepOffStop ? TimeInterval(stepOffDelay) : nil }
     @Published var stepExtension = UserDefaults.standard.bool(forKey: "stepExtension") {
         didSet {
             UserDefaults.standard.set(stepExtension, forKey: "stepExtension")
@@ -58,6 +66,7 @@ final class AppModel: ObservableObject {
         barMetrics = MetricPreferences.enabled(barMetrics).map(\.rawValue)
         bluetooth.stepExtension = stepExtension
         bluetooth.autoConnect = autoConnect
+        applyStepOff()
         bluetooth.onTelemetry = { [weak self] update in self?.record(update) }
         bluetooth.onPadRecord = { [weak self] record in self?.importPadRecord(record) }
         bluetooth.onDisconnect = { [weak self] in

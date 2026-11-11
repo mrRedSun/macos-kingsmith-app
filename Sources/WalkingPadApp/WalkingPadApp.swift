@@ -138,6 +138,9 @@ private struct PadMenu: View {
                 MetricReadout(title: "Time", value: model.value(.duration, source: "pad"))
             }
         }
+        if bluetooth.steppedOffStop {
+            Label("Stopped because nobody was walking.", systemImage: "figure.stand").font(.caption)
+        }
         if bluetooth.stopQueued {
             Label("Stop queued. Use your remote if needed.", systemImage: "clock").font(.caption)
         }

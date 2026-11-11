@@ -9,6 +9,7 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN_DIR/WalkingPad" "$APP/Contents/MacOS/WalkingPad"
 cp "$ROOT/Resources/Info.plist" "$APP/Contents/Info.plist"
 cp "$ROOT/THIRD_PARTY_NOTICES.md" "$APP/Contents/Resources/THIRD_PARTY_NOTICES.md"
+cp "$ROOT/Resources/Icon/Assets.car" "$ROOT/Resources/Icon/AppIcon.icns" "$APP/Contents/Resources/"
 /usr/bin/plutil -lint "$APP/Contents/Info.plist"
 # A stable identity keeps macOS's Bluetooth permission across rebuilds; an ad hoc
 # signature changes with every build, so macOS treats each one as a new app.
