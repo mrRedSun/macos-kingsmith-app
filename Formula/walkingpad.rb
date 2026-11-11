@@ -2,8 +2,8 @@
 class Walkingpad < Formula
   desc "Menu-bar client for KingSmith WalkingPad treadmills"
   homepage "https://github.com/mrRedSun/macos-kingsmith-app"
-  url "https://github.com/mrRedSun/macos-kingsmith-app/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "dfc5d3596cca94618846e9ba5d1e9e004dd43d20ef1a8b74c462eb206838e1bf"
+  url "https://github.com/mrRedSun/macos-kingsmith-app/archive/refs/tags/v0.1.1.tar.gz"
+  sha256 "522407f51117202f3c9b1009645833eabcefb1489056a93135a37989cf5d705d"
   license "MIT"
   head "https://github.com/mrRedSun/macos-kingsmith-app.git", branch: "main"
 
